@@ -1,19 +1,21 @@
 node
 {
- stage "1. Create a build output"
- sh "mkdir -p output"
- sh "mkdir -p input"
- writeFile file:"output/usefulfile.txt",text:"This is a useful file."
- writeFile file:"output/usefulfile.md",text:"This is a c."
- writeFile file:"output/git.html",text:"Thsi is a useless file from git repository."
- stage "2. Archive Build Output"
- writeFile file:"input/usefulfile.txt",text:"This is a useful file from SCM."
- writeFile file:"input/uselessfile.md",text:"This is a useless file from SCM."
- stage "3. Build the code"
- echo "Building the code from SCM"
- stage "4. Another step"
- sh "touch another.html"
- stage "5. Git step"
- sh "touch another_git_repo.html"
- }
- 
+    stage "1. install docker"
+    sh "yum install docker -y"
+    
+    stage "2. Start the service"
+    sh "service docker start"
+    
+    stage "3. Build the image"
+    sh "docker build -t jenkinsfile_image_scm /home/ec2-user"
+    
+    stage "4. Run the container"
+    sh "docker run -dit --name jenkinsfile_container jenkinsfile_image_scm"
+    
+    stage "5. Push the image"
+    sh "docker login --username odesha --password Welcome@9"
+    
+    sh "docker tag jenkinsfile_image_scm odesha/jenkinsfile_image_scm"
+    
+    sh "docker push odesha/jenkinsfile_image_scm"
+}
