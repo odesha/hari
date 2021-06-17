@@ -1,1 +1,3 @@
-# This is new repository
+# od repo
+
+new file from od file
